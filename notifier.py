@@ -7,10 +7,12 @@ import sqlite3
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 import db
 
 POLL_SECONDS = 60
+ICON_PATH = str(Path(__file__).parent / "icon.svg")
 
 # https://docs.github.com/en/rest/activity/notifications#about-notification-reasons
 ALLOWED_REASONS = {
@@ -50,7 +52,7 @@ def fire_popup(reason: str, repo: str, title: str, url: str) -> None:
     summary = f"[{reason}] {repo}"
     body = f"{title}\n{url}"
     subprocess.run(
-        ["notify-send", "--app-name=gh-notify", summary, body],
+        ["notify-send", "--app-name=gh-notify", f"--icon={ICON_PATH}", summary, body],
         check=False,
     )
     print(f"{summary} :: {title} :: {url}", flush=True)
